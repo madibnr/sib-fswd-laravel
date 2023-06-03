@@ -2,15 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Kategori;
 use App\Models\Product;
+use App\Models\Produk;
+use App\Models\Slider;
+use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
-    public function index()
-    {
-        $products = Product::all(); // Mengambil semua data produk dari model
+    //
+    public function index() {
+        //mengambil 8 data secara acak
+        $produk = Produk::inRandomOrder(8)->get();
 
-        return view('landing', compact('products')); // Mengirim data produk ke view
+        //mengambil data category
+        $kategori = Kategori::all();
+
+        //mengambil data slider
+        $slider = Slider::all();
+
+        return view('landing', compact('produk', 'kategori', 'slider'));
     }
 }
