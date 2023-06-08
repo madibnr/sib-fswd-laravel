@@ -42,9 +42,9 @@ Route::post('/register', [RegisterController::class, 'store'])->name('register.s
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login.authenticate');
+
 Route::middleware('auth')->group(function() {
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
 
     //Admin
     Route::middleware('role:Admin')->group(function(){
