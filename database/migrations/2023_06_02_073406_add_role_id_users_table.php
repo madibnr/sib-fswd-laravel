@@ -13,7 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            $table->bigInteger('role_id')->after('id');
+            //
+        });
     }
 
     /**
@@ -26,5 +29,6 @@ return new class extends Migration
         Schema::table('users', function(Blueprint $table) {
             //
         });
+    
     }
 };

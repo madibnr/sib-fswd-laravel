@@ -184,7 +184,7 @@
                             </ul>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="service.html">Our Service</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contact-us.html">Contact Us</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('dashboard')}}">Login</a></li>
                     </ul>
                 </div>
                 <!-- /.navbar-collapse -->
