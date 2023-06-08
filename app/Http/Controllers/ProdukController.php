@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProdukController extends Controller
 {
@@ -40,6 +41,17 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'kategori' => 'required',
+            'name' => 'required|min:3',
+            'caption' => 'required',
+            'harga' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $produk = Produk::create([
             'kategori_id' => $request->kategori,
             'name' => $request->name,
@@ -87,17 +99,30 @@ class ProdukController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // ambil data product berdasarkan id
+        $validator = Validator::make($request->all(), [
+            'kategori' => 'required',
+            'name' => 'required|min:3',
+            'caption' => 'required',
+            'harga' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
         $produk = Produk::find($id);
-        
-        // update data product
+
+        if (!$produk) {
+            return redirect()->route('produk.index')->with('error', 'Produk not found');
+        }
+
         $produk->update([
             'kategori_id' => $request->kategori,
-            'nama' => $request->nama,
+            'name' => $request->name,
+            'caption' => $request->caption,
             'harga' => $request->harga,
         ]);
-        
-        // redirect ke halaman product.index
+
         return redirect()->route('produk.index');
     }
 

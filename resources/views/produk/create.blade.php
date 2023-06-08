@@ -20,15 +20,24 @@
                         </div>
                         <div class="mb-3">
                             <label for="nama" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <input type="text" class="form-control" id="name" name="name">
+                            @error('name')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="caption" class="form-label">Caption</label>
-                            <input type="text" class="form-control" id="caption" name="caption" required>
+                            <input type="text" class="form-control" id="caption" name="caption">
+                            @error('caption')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="mb-3">
                             <label for="harga" class="form-label">Price</label>
-                            <input type="text" class="form-control" id="harga" name="harga" required>
+                            <input type="text" class="form-control" id="harga" name="harga">
+                            @error('harga')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
