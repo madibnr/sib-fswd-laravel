@@ -40,6 +40,7 @@
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        @if (Auth::user()->role->name !== 'Staff')
                         <div class="col-md-6">
                             <label for="level" class="form-label">Status</label>
                             <select name="status" class="form-control">
@@ -49,6 +50,9 @@
                                 <option value="reject">Reject</option>
                             </select>
                         </div>
+                        @else
+                            <input type="hidden" name="status" value="{{ $produk->status }}">
+                        @endif
                         <div class="mb-3">
                             <label for="image" class="form-label">Slider Image</label>
                             <input class="form-control" type="file" name="image" id="image" accept=".jpg, .jpeg, .png., .webp">

@@ -8,9 +8,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SliderController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function getAllUser()
     {
         $sliders = Slider::all();
@@ -71,38 +77,40 @@ class SliderController extends Controller
      */
     public function store(Request $request)
     {
-        // Check if the authenticated user has the role 'Staff'
-        if (Auth::user()->role->name == 'Staff') {
-            // Validate the request data
-            $validatedData = $request->validate([
-                'title' => 'required',
-                'caption' => 'required',
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        $request->validate([
+            'title' => 'required',
+            'caption' => 'required',
+            'image' => 'required|mimes:jpeg,png,jpg,svg',
+        ]);
+    
+        // Check if the authenticated user has the role "Staff"
+        if (Auth::check() && Auth::user()->role->name === 'Staff') {
+            $status = 'pending';
+        } else {
+            $request->validate([
+                'status' => 'required|in:active,pending,expired',
             ]);
     
-            // Get the file from the request
-            $image = $request->file('image');
-    
-            // Generate a unique file name
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-    
-            // Store the image in the 'public/slider' directory
-            $image->storeAs('public/slider', $imageName);
-    
-            // Create a new Slider instance
-            $slider = new Slider();
-            $slider->title = $validatedData['title'];
-            $slider->caption = $validatedData['caption'];
-            $slider->image = $imageName;
-            $slider->status = 'pending'; // Set the status to 'pending'
-            $slider->save();
-    
-            // Redirect to the index page or any other page as needed
-            return redirect()->route('slider.index');
-        } else {
-            // Redirect to unauthorized page or show an error message
-            return redirect()->route('unauthorized');
+            $status = $request->status;
         }
+    
+        // Cek apakah upload file
+        if ($request->hasFile('image')) {
+            $name = $request->file('image');
+            $imageName = 'Slider_' . time() . '.' . $name->getClientOriginalExtension();
+            $path = Storage::putFileAs('public/slider', $request->file('image'), $imageName);
+        }
+    
+        // insert data ke table slider
+        DB::table('slider')->insert([
+            'title' => $request->title,
+            'status' => $status,
+            'caption' => $request->caption,
+            'image' => $imageName,
+        ]);
+    
+        // alihkan halaman ke halaman slider
+        return redirect('slider');
     }
     
 

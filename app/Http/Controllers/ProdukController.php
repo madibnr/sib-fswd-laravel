@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Kategori;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -12,8 +14,8 @@ class ProdukController extends Controller
 {
     public function getAllUser()
     {
-        $sliders =  Slider::all();
-        return view('slider', compact("slider"));
+        $produk =  Produk::all();
+        return view('produk', compact("produk"));
     }
     /**
      * Display a listing of the resource.
@@ -68,38 +70,45 @@ class ProdukController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'kategori' => 'required',
-            'name' => 'required|min:3',
+        $request->validate([
+            'kategori_id' => 'required',
+            'name' => 'required',
             'caption' => 'required',
             'harga' => 'required|numeric',
-            'status' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|mimes:jpeg,png,jpg,svg',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+    
+        // Check if the authenticated user has the role "Staff"
+        if (Auth::check() && Auth::user()->role->name === 'Staff') {
+            $status = 'pending';
+        } else {
+            $request->validate([
+                'status' => 'required|in:active,pending,expired',
+            ]);
+    
+            $status = $request->status;
         }
-
-        // Cek apakah upload file
+    
+        // Check if the request has an uploaded file
         if ($request->hasFile('image')) {
             $name = $request->file('image');
             $imageName = 'Produk_' . time() . '.' . $name->getClientOriginalExtension();
             $path = Storage::putFileAs('public/produk', $request->file('image'), $imageName);
         }
-
-        $produk = Produk::create([
-            'kategori_id' => $request->kategori,
+    
+        // Insert data into the `produk` table
+        DB::table('produk')->insert([
+            'kategori_id' => $request->kategori_id,
             'name' => $request->name,
             'caption' => $request->caption,
             'harga' => $request->harga,
-            'status' => $request->status,
-            'image' => $path, // Simpan path gambar ke kolom 'image'
+            'status' => $status,
+            'image' => $imageName,
         ]);
-
+    
+        // Redirect to the produk index page
         return redirect()->route('produk.index');
     }
-
     /**
      * Display the specified resource.
      *
@@ -140,7 +149,7 @@ class ProdukController extends Controller
         // cek jika user mengupload gambar di form
         if ($request->hasFile('image')) {
             // ambil nama file gambar lama dari database
-            $old_image = Slider::find($id)->image;
+            $old_image = Produk::find($id)->image;
     
             // hapus file gambar lama dari folder slider
             Storage::delete('public/produk/'.$old_image);

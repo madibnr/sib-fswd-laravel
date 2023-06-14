@@ -26,6 +26,10 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+Route::get('/unauthorized', function () {
+    return view('unauthorized');
+})->name('unauthorized');
+
 // Tugas 22
 // Route::get('/crud', [UserController::class, 'index']);
 // Route::get('/crud.add', [UserController::class, 'add']);

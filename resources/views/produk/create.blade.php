@@ -11,7 +11,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="kategori" class="form-label">Kategori</label>
-                            <select class="form-select" aria-label="kategori" id="kategori" name="kategori">
+                            <select class="form-select" aria-label="kategori" id="kategori" name="kategori_id">
                                 <option selected disabled>- Pilih Kategori -</option>
                                 @foreach ($kategori as $cat)
                                     <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="harga" class="form-label">Harga</label>
-                            <input type="text" class="form-control" id="harga" name="harga">
+                            <input type="number" class="form-control" id="harga" name="harga">
                             @error('harga')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror

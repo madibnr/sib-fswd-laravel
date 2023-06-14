@@ -59,8 +59,8 @@
                                         <td>{{ $produk->status }}</td>
                                         <td>
                                             @if (Auth::user()->role->name != 'Staff' || !in_array($produk->status, ['approve', 'reject']))
-                                                <form onsubmit="return confirm('Are you sure? ');" action="{{ route('slider.destroy', $produk->id) }}" method="POST">
-                                                    <a href="{{ route('slider.edit', $produk->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                                <form onsubmit="return confirm('Are you sure? ');" action="{{ route('produk.destroy', $produk->id) }}" method="POST">
+                                                    <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-sm btn-warning">Edit</a>
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
