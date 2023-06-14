@@ -21,7 +21,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">Phone</label>
-                            <input type="text" class="form-control" id="phone" value="{{ $user->phone }}" name="phone" required>
+                          <input type="text" class="form-control" id="phone" value="{{ $user->phone }}" name="phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" >
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>

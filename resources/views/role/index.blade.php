@@ -3,10 +3,10 @@
 @section('content')
     <main>
         <div class="container-fluid px-4">
-            <h1 class="my-4">Role</h1>
+            <h1 class="my-4">Role
             
-            <a href="{{ route('role.create') }}" class="btn btn-primary mb-2">Create New</a>
-
+            <a href="{{ route('role.create') }}" class="btn btn-primary mb-2 float-end">Create New</a>
+            </h1>
             <div class="card mb-4">
                 <div class="card-body">
                     <table id="dataTable" class="table table-striped">

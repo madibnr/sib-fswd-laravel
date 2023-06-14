@@ -28,7 +28,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
-                            <select class="form-select" aria-label="role" id="role" name="role">
+                            <select class="form-select" aria-label="role" id="role" name="role_id">
                                 <option selected disabled>- Choose role-</option>
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->id }}">{{ $role->name }}</option>

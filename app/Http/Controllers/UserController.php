@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -58,8 +59,8 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'role' => $request->role,
-            'password' => $request->password, // default password, sementara di hardcode
+            'role_id' => $request->role_id,
+            'password' => Hash::make($request->password),
             //'image' => $request->image,
         ]);
 
@@ -109,15 +110,28 @@ class UserController extends Controller
     {
         // Ambil data user berdasarkan id
         $user = User::find($id);
-        
-        // Update data user
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone
-        ]);
-        
-        // Redirect ke halaman user.index
+    
+        // ...
+    
+        // Periksa apakah request memiliki input password
+        if ($request->has('password')) {
+            // Update dengan password baru yang di-hash
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'role_id' => $request->role_id,
+                'password' => Hash::make($request->password),
+            ]);
+        } else {
+            // Update tanpa mengubah password
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'role_id' => $request->role_id,
+            ]);
+        }
         return redirect()->route('user.index');
     }
 

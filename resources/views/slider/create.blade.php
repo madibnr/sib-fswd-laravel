@@ -25,9 +25,17 @@
                             <label for="image" class="form-label">Slider Image</label>
                             <input class="form-control" type="file" name="image" id="image" accept=".jpg, .jpeg, .png., .webp">
                         </div>
-
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <a href="{{ route('slider.index') }}" class="btn btn-secondary">Cancel</a>
+                        <div class="col-md-6">
+                            <label for="level" class="form-label">Status</label>
+                            <select name="status" class="form-control">
+                                <option value="">Pilih Status</option>
+                                <option value="active">Active</option>
+                                <option value="pending">Pending</option>
+                                <option value="expired">Expired</option>
+                            </select>
+                        </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="{{ route('slider.index') }}" class="btn btn-secondary">Cancel</a>
                     </form>
 
                 </div>

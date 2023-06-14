@@ -23,8 +23,8 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 */
 
 Route::get('/', function () {
-    return view('landing'); 
-});
+    return view('landing');
+})->name('landing');
 
 // Tugas 22
 // Route::get('/crud', [UserController::class, 'index']);
@@ -34,8 +34,13 @@ Route::get('/', function () {
 //edit tugas ke 23 menjadi tugas 24
 // Route::get('/', [LandingController::class, 'index'])->name('landing');
 
+Route::get("users_server_side", "UserController@getAllUserServerSide");
+Route::get('/', [LandingController::class, 'index'])->name('landing'); // route untuk menampilkan data awal
+Route::get('/', [LandingController::class, 'index'])->name('dashboard'); // route untuk menampilkan data awal
+
 // Dashboard
 Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('isLogin');
+// Route::get('dashboard', [SliderController::class, 'getPendingCount'])->name('dashboard');
 
 Route::get('/register', [RegisterController::class, 'index'])->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
@@ -46,8 +51,8 @@ Route::post('/login', [LoginController::class, 'authenticate'])->name('login.aut
 Route::middleware('auth')->group(function() {
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    //Admin
-    Route::middleware('role:Admin')->group(function(){
+    //Admin dan Staff
+    Route::middleware('role:Admin|Staff')->group(function(){
 
         // Slider
         Route::get('/slider', [SliderController::class, 'index'])->name('slider.index'); // route untuk menampilkan data awal

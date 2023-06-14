@@ -7,12 +7,12 @@
 
             <div class="card mb-4">
                 <div class="card-body">
-                    <form action="{{ route('produk.store') }}" method="POST">
+                    <form action="{{ route('produk.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
-                            <label for="kategori" class="form-label">Category</label>
+                            <label for="kategori" class="form-label">Kategori</label>
                             <select class="form-select" aria-label="kategori" id="kategori" name="kategori">
-                                <option selected disabled>- Choose Category -</option>
+                                <option selected disabled>- Pilih Kategori -</option>
                                 @foreach ($kategori as $cat)
                                     <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
                                 @endforeach
@@ -33,12 +33,24 @@
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="harga" class="form-label">Price</label>
+                            <label for="harga" class="form-label">Harga</label>
                             <input type="text" class="form-control" id="harga" name="harga">
                             @error('harga')
                                 <div class="alert alert-danger">{{ $message }}</div>
                             @enderror
+                        </div>
+                        <div class="col-md-6">
+                            <label for="level" class="form-label">Status</label>
+                            <select name="status" class="form-control">
+                                <option value="">Pilih Status</option>
+                                <option value="approve">Approve</option>
+                                <option value="pending">Pending</option>
+                                <option value="reject">Reject</option>
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Slider Image</label>
+                            <input class="form-control" type="file" name="image" id="image" accept=".jpg, .jpeg, .png., .webp">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                         <a href="{{ route('produk.index') }}" class="btn btn-secondary">Cancel</a>
