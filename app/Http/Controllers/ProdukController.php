@@ -75,7 +75,8 @@ class ProdukController extends Controller
             'name' => 'required',
             'caption' => 'required',
             'harga' => 'required|numeric',
-            'image' => 'required|mimes:jpeg,png,jpg,svg',
+            'status' => 'required',
+            'image' => 'required|mimes:jpeg,png,jpg,svg+xml',
         ]);
     
         // Check if the authenticated user has the role "Staff"
@@ -83,7 +84,7 @@ class ProdukController extends Controller
             $status = 'pending';
         } else {
             $request->validate([
-                'status' => 'required|in:active,pending,expired',
+                'status' => 'required|in:approve,pending,reject',
             ]);
     
             $status = $request->status;
@@ -195,13 +196,19 @@ class ProdukController extends Controller
      */
     public function destroy($id)
     {
-        // ambil data product berdasarkan id
+        // Get the product by ID
         $produk = Produk::find($id);
-        
-        // hapus data product
-        $produk->delete();
-        
-        // redirect ke halaman product.index
+
+        // Check if the product exists
+        if ($produk) {
+            // Delete the associated image from storage
+            Storage::delete('public/produk/' . $produk->image);
+
+            // Delete the product
+            $produk->delete();
+        }
+
+        // Redirect to the product index page
         return redirect()->route('produk.index');
     }
 }
